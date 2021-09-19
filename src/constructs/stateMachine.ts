@@ -1,5 +1,5 @@
-import * as path from 'path';
-import * as lambda from '@aws-cdk/aws-lambda-nodejs';
+import * as sns from '@aws-cdk/aws-sns';
+import * as subscriptions from '@aws-cdk/aws-sns-subscriptions';
 import * as sfn from '@aws-cdk/aws-stepfunctions';
 import * as tasks from '@aws-cdk/aws-stepfunctions-tasks';
 import * as cdk from '@aws-cdk/core';
@@ -15,6 +15,9 @@ export class StateMachine extends cdk.Construct {
   constructor(scope: cdk.Construct, id: string, props: StateMachineProps) {
     super(scope, id);
 
+    const emailConfirmationTopic = new sns.Topic(this, 'EmailConfirmationTopic');
+    emailConfirmationTopic.addSubscription(new subscriptions.EmailSubscription('henrik.fricke@superluminar.io'));
+
     const getSubscription = new tasks.DynamoGetItem(this, 'Get Subscription', {
       table: props.storage.newsletterTable,
       key: { email: tasks.DynamoAttributeValue.fromString(sfn.JsonPath.stringAt('$.email')) },
@@ -26,7 +29,6 @@ export class StateMachine extends cdk.Construct {
       item: {
         email: tasks.DynamoAttributeValue.fromString(sfn.JsonPath.stringAt('$.email')),
         createdAt: tasks.DynamoAttributeValue.fromString(new Date().toISOString()),
-        confirmed: tasks.DynamoAttributeValue.fromBoolean(false),
       },
     });
 
@@ -37,16 +39,14 @@ export class StateMachine extends cdk.Construct {
 
     const doNothing = new sfn.Pass(this, 'Do nothing');
 
-    const sendEmailConfirmationLambda = new lambda.NodejsFunction(this, 'SendEmailConfirmationLambda', {
-      entry: path.join(__dirname, '../functions/sendEmailConfirmation.ts'),
-    });
-
-    const sendEmailConfirmation = new tasks.LambdaInvoke(this, 'Send Email Confirmation', {
-      lambdaFunction: sendEmailConfirmationLambda,
+    const sendEmailConfirmation = new tasks.SnsPublish(this, 'Send Email Confirmation', {
+      topic: emailConfirmationTopic,
       integrationPattern: sfn.IntegrationPattern.WAIT_FOR_TASK_TOKEN,
-      payload: sfn.TaskInput.fromObject({
+      timeout: cdk.Duration.days(1),
+      message: sfn.TaskInput.fromObject({
         token: sfn.JsonPath.taskToken,
       }),
+      resultPath: '$.sendEmailConfirmation',
     });
 
     const subscribeOrUnsubscribe = new sfn.Choice(this, 'Subscribe or Unsubscribe?')
@@ -55,7 +55,7 @@ export class StateMachine extends cdk.Construct {
           sfn.Condition.stringEquals('$.type', 'SUBSCRIBE'),
           sfn.Condition.isNotPresent('$.subscription.Item'),
         ),
-        subscribe.next(sendEmailConfirmation),
+        sendEmailConfirmation.next(subscribe),
       )
       .when(
         sfn.Condition.and(

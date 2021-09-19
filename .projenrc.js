@@ -9,9 +9,10 @@ const project = new AwsCdkTypeScriptApp({
     '@aws-cdk/aws-dynamodb',
     '@aws-cdk/aws-stepfunctions',
     '@aws-cdk/aws-stepfunctions-tasks',
-    '@aws-cdk/aws-lambda-nodejs',
     '@aws-cdk/aws-apigateway',
     '@aws-cdk/aws-iam',
+    '@aws-cdk/aws-sns',
+    '@aws-cdk/aws-sns-subscriptions',
   ],
   deps: [
     'aws-sdk',
