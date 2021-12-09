@@ -1,27 +1,30 @@
 const { AwsCdkTypeScriptApp, NodePackageManager } = require('projen');
 
 const project = new AwsCdkTypeScriptApp({
-  cdkVersion: '1.95.2',
-  defaultReleaseBranch: 'main',
+  // Project config
   name: 'aws-cdk-newsletter',
+  description: 'Functionless example with AWS Step Functions',
+  authorName: 'Henrik Fricke',
+  authorEmail: 'henrikfricke@web.de',
+  authorUrl: 'https://yetanother.blog',
+  license: 'MIT',
+  defaultReleaseBranch: 'main',
+
+  // CDK config
+  cdkVersion: '1.95.2',
+  cdkVersion: '2.0.0',
+  constructsVersion: '10.0.0',
   packageManager: NodePackageManager.NPM,
-  cdkDependencies: [
-    '@aws-cdk/aws-dynamodb',
-    '@aws-cdk/aws-stepfunctions',
-    '@aws-cdk/aws-stepfunctions-tasks',
-    '@aws-cdk/aws-apigateway',
-    '@aws-cdk/aws-iam',
-    '@aws-cdk/aws-sns',
-    '@aws-cdk/aws-sns-subscriptions',
+
+  // Dependencies
+  devDeps: [
+    'constructs',
+    'aws-cdk-lib',
+    '@types/node',
+    'esbuild@0',
   ],
   deps: [
-    'aws-sdk',
-  ],
-  devDeps: [
-    '@types/node',
-    '@types/aws-lambda',
-    '@types/aws-sdk',
-    'esbuild@0',
+    '@aws-sdk/client-sesv2',
   ],
 });
 

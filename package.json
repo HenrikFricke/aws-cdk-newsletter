@@ -1,5 +1,6 @@
 {
   "name": "aws-cdk-newsletter",
+  "description": "Functionless example with AWS Step Functions",
   "scripts": {
     "clobber": "npx projen clobber",
     "compile": "npx projen compile",
@@ -18,42 +19,42 @@
     "diff": "npx projen diff",
     "projen": "npx projen"
   },
+  "author": {
+    "name": "Henrik Fricke",
+    "email": "henrikfricke@web.de",
+    "url": "https://yetanother.blog",
+    "organization": false
+  },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.83",
-    "@types/aws-sdk": "^2.7.0",
-    "@types/jest": "^27.0.1",
+    "@types/jest": "^27.0.2",
     "@types/node": "^14.17.0",
-    "@typescript-eslint/eslint-plugin": "^4.31.1",
-    "@typescript-eslint/parser": "^4.31.1",
-    "aws-cdk": "^1.95.2",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/parser": "^4.33.0",
+    "aws-cdk": "^2.0.0",
+    "aws-cdk-lib": "^2.1.0",
+    "constructs": "^10.0.10",
     "esbuild": "0",
     "eslint": "^7.32.0",
     "eslint-import-resolver-node": "^0.3.6",
     "eslint-import-resolver-typescript": "^2.5.0",
-    "eslint-plugin-import": "^2.24.2",
-    "jest": "^27.2.0",
+    "eslint-plugin-import": "^2.25.2",
+    "jest": "^27.3.1",
     "jest-junit": "^12",
     "json-schema": "^0.3.0",
     "npm-check-updates": "^11",
     "projen": "^0.28.16",
-    "ts-jest": "^27.0.5",
+    "ts-jest": "^27.0.7",
     "ts-node": "^9",
-    "typescript": "^4.4.3"
+    "typescript": "^4.4.4"
   },
   "dependencies": {
-    "@aws-cdk/assert": "^1.95.2",
-    "@aws-cdk/aws-apigateway": "^1.95.2",
-    "@aws-cdk/aws-dynamodb": "^1.95.2",
-    "@aws-cdk/aws-iam": "^1.95.2",
-    "@aws-cdk/aws-sns": "^1.95.2",
-    "@aws-cdk/aws-sns-subscriptions": "^1.95.2",
-    "@aws-cdk/aws-stepfunctions": "^1.95.2",
-    "@aws-cdk/aws-stepfunctions-tasks": "^1.95.2",
-    "@aws-cdk/core": "^1.95.2",
-    "aws-sdk": "^2.990.0"
+    "@aws-cdk/assert": "^2.0.0",
+    "@aws-sdk/client-sesv2": "^3.40.0",
+    "aws-cdk-lib": "^2.0.0",
+    "constructs": "^10.0.5"
   },
   "bundledDependencies": [],
-  "license": "Apache-2.0",
+  "license": "MIT",
   "version": "0.0.0",
   "jest": {
     "testMatch": [

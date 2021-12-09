@@ -1,14 +1,6 @@
 {
   "dependencies": [
     {
-      "name": "@types/aws-lambda",
-      "type": "build"
-    },
-    {
-      "name": "@types/aws-sdk",
-      "type": "build"
-    },
-    {
       "name": "@types/jest",
       "type": "build"
     },
@@ -26,8 +18,16 @@
       "type": "build"
     },
     {
+      "name": "aws-cdk-lib",
+      "type": "build"
+    },
+    {
       "name": "aws-cdk",
-      "version": "^1.95.2",
+      "version": "^2.0.0",
+      "type": "build"
+    },
+    {
+      "name": "constructs",
       "type": "build"
     },
     {
@@ -88,51 +88,21 @@
     },
     {
       "name": "@aws-cdk/assert",
-      "version": "^1.95.2",
+      "version": "^2.0.0",
       "type": "runtime"
     },
     {
-      "name": "@aws-cdk/aws-apigateway",
-      "version": "^1.95.2",
+      "name": "@aws-sdk/client-sesv2",
       "type": "runtime"
     },
     {
-      "name": "@aws-cdk/aws-dynamodb",
-      "version": "^1.95.2",
+      "name": "aws-cdk-lib",
+      "version": "^2.0.0",
       "type": "runtime"
     },
     {
-      "name": "@aws-cdk/aws-iam",
-      "version": "^1.95.2",
-      "type": "runtime"
-    },
-    {
-      "name": "@aws-cdk/aws-sns-subscriptions",
-      "version": "^1.95.2",
-      "type": "runtime"
-    },
-    {
-      "name": "@aws-cdk/aws-sns",
-      "version": "^1.95.2",
-      "type": "runtime"
-    },
-    {
-      "name": "@aws-cdk/aws-stepfunctions-tasks",
-      "version": "^1.95.2",
-      "type": "runtime"
-    },
-    {
-      "name": "@aws-cdk/aws-stepfunctions",
-      "version": "^1.95.2",
-      "type": "runtime"
-    },
-    {
-      "name": "@aws-cdk/core",
-      "version": "^1.95.2",
-      "type": "runtime"
-    },
-    {
-      "name": "aws-sdk",
+      "name": "constructs",
+      "version": "^10.0.5",
       "type": "runtime"
     }
   ],

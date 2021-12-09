@@ -113,7 +113,7 @@
           "exec": "npm install"
         },
         {
-          "exec": "npm update @types/aws-lambda @types/aws-sdk @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk esbuild eslint eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import jest jest-junit json-schema npm-check-updates ts-jest ts-node typescript @aws-cdk/assert @aws-cdk/aws-apigateway @aws-cdk/aws-dynamodb @aws-cdk/aws-iam @aws-cdk/aws-sns-subscriptions @aws-cdk/aws-sns @aws-cdk/aws-stepfunctions-tasks @aws-cdk/aws-stepfunctions @aws-cdk/core aws-sdk"
+          "exec": "npm update @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk-lib aws-cdk constructs esbuild eslint eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import jest jest-junit json-schema npm-check-updates ts-jest ts-node typescript @aws-cdk/assert @aws-sdk/client-sesv2 aws-cdk-lib constructs"
         },
         {
           "exec": "npx projen"
