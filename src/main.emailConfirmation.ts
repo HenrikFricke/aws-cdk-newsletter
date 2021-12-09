@@ -12,6 +12,7 @@ interface Event {
 export async function handler(event: Event): Promise<void> {
   const fromEmailAddress = process.env.FROM_EMAIL_ADDRESS;
   const token = Buffer.from(event.token).toString('base64');
+  const type = event.type;
 
   const subjects = {
     SUBSCRIBE: 'Welcome to our fancy newsletter',
@@ -29,12 +30,12 @@ export async function handler(event: Event): Promise<void> {
       Content: {
         Simple: {
           Subject: {
-            Data: subjects[event.type],
+            Data: subjects[type],
             Charset: 'UTF-8',
           },
           Body: {
             Text: {
-              Data: `Please click on the link: ${event.confirmationEndpoint}?token=${token}`,
+              Data: `Please click on the link: ${event.confirmationEndpoint}?token=${token}&type=${type.toLowerCase()}`,
               Charset: 'UTF-8',
             },
           },

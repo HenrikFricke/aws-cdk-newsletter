@@ -16,7 +16,9 @@ import { Construct } from 'constructs';
 
 export interface NewsletterStackProps extends StackProps {
   fromEmailAddress: string;
-  cofirmationRedirectionUrl: string;
+  subscribedUrl: string;
+  unsubscribedUrl: string;
+  errorUrl: string;
 }
 
 export class NewsletterStack extends Stack {
@@ -89,13 +91,13 @@ export class NewsletterStack extends Stack {
     /*
     ** API
     */
+    const api = new apigateway.RestApi(this, 'NewsletterApi');
+
     const integrationRole = new iam.Role(this, 'ApiIntegrationRole', {
       assumedBy: new iam.ServicePrincipal('apigateway.amazonaws.com'),
     });
     stateMachine.grantTaskResponse(integrationRole);
     stateMachine.grantStartExecution(integrationRole);
-
-    const api = new apigateway.RestApi(this, 'NewsletterApi');
 
     const integrationResponses = [
       {
@@ -157,8 +159,17 @@ export class NewsletterStack extends Stack {
           integrationResponses: [
             {
               statusCode: '301',
-              responseParameters: {
-                'method.response.header.location': `'${props.cofirmationRedirectionUrl}'`,
+              responseTemplates: {
+                'application/json': `
+                  #set ($type = $input.params('type'))
+                  #if( $type == 'subscribe' )
+                    #set($context.responseOverride.header.location = "${props.subscribedUrl}")
+                  #elseif( $type == 'unsubscribe' )
+                    #set($context.responseOverride.header.location = "${props.unsubscribedUrl}")
+                  #else
+                    #set($context.responseOverride.header.location = "${props.errorUrl}")
+                  #end
+                `,
               },
             },
           ],
@@ -167,9 +178,6 @@ export class NewsletterStack extends Stack {
       {
         methodResponses: [{
           statusCode: '301',
-          responseParameters: {
-            'method.response.header.location': true,
-          },
         }],
       },
     );
@@ -180,7 +188,9 @@ const app = new App();
 
 new NewsletterStack(app, 'aws-cdk-newsletter', {
   fromEmailAddress: 'henrik.fricke@superluminar.io',
-  cofirmationRedirectionUrl: 'https://example.com',
+  subscribedUrl: 'https://example.com/subscribed',
+  unsubscribedUrl: 'https://example.com/unsubscribed',
+  errorUrl: 'https://example.com/ohno',
   env: {
     region: 'eu-central-1',
   },
