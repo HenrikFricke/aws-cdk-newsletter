@@ -18,6 +18,7 @@ export interface NewsletterStackProps extends StackProps {
   fromEmailAddress: string;
   subscribedUrl: string;
   unsubscribedUrl: string;
+  timeoutdUrl: string;
   errorUrl: string;
 }
 
@@ -64,7 +65,7 @@ export class NewsletterStack extends Stack {
     const sendEmailConfirmation = new tasks.LambdaInvoke(this, 'SendEmailConfirmation', {
       lambdaFunction: emailConfirmationFunction,
       integrationPattern: sfn.IntegrationPattern.WAIT_FOR_TASK_TOKEN,
-      timeout: Duration.days(1),
+      heartbeat: Duration.days(1),
       payload: sfn.TaskInput.fromObject({
         email: sfn.JsonPath.stringAt('$.email'),
         confirmationEndpoint: sfn.JsonPath.stringAt('$.confirmationEndpoint'),
@@ -162,7 +163,9 @@ export class NewsletterStack extends Stack {
               responseTemplates: {
                 'application/json': `
                   #set ($type = $input.params('type'))
-                  #if( $type == 'subscribe' )
+                  #if( $input.path('$.message') == "Task Timed Out: 'Provided task does not exist anymore'" )
+                    #set($context.responseOverride.header.location = "${props.timeoutdUrl}")
+                  #elseif( $type == 'subscribe' )
                     #set($context.responseOverride.header.location = "${props.subscribedUrl}")
                   #elseif( $type == 'unsubscribe' )
                     #set($context.responseOverride.header.location = "${props.unsubscribedUrl}")
@@ -176,9 +179,7 @@ export class NewsletterStack extends Stack {
         },
       }),
       {
-        methodResponses: [{
-          statusCode: '301',
-        }],
+        methodResponses: [{ statusCode: '301' }],
       },
     );
   }
@@ -187,9 +188,10 @@ export class NewsletterStack extends Stack {
 const app = new App();
 
 new NewsletterStack(app, 'aws-cdk-newsletter', {
-  fromEmailAddress: 'henrik.fricke@superluminar.io',
+  fromEmailAddress: 'henrikfricke@web.de',
   subscribedUrl: 'https://example.com/subscribed',
   unsubscribedUrl: 'https://example.com/unsubscribed',
+  timeoutdUrl: 'https://example.com/invalid',
   errorUrl: 'https://example.com/ohno',
   env: {
     region: 'eu-central-1',
