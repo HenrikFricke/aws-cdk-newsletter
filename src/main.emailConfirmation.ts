@@ -6,7 +6,7 @@ interface Event {
   email: string;
   confirmationEndpoint: string;
   token: string;
-  type: 'SUBSCRIBE' | 'UNSUBSCRIBE';
+  type: 'subscribe' | 'unsubscribe';
 }
 
 export async function handler(event: Event): Promise<void> {
@@ -15,8 +15,8 @@ export async function handler(event: Event): Promise<void> {
   const type = event.type;
 
   const subjects = {
-    SUBSCRIBE: 'Welcome to our fancy newsletter',
-    UNSUBSCRIBE: 'We are sorry to see you go :(',
+    subscribe: 'Welcome to our fancy newsletter',
+    unsubscribe: 'We are sorry to see you go :(',
   };
 
   await sesClient.send(
@@ -35,7 +35,7 @@ export async function handler(event: Event): Promise<void> {
           },
           Body: {
             Text: {
-              Data: `Please click on the link: ${event.confirmationEndpoint}?token=${token}&type=${type.toLowerCase()}`,
+              Data: `Please click on the link: ${event.confirmationEndpoint}?token=${token}&type=${type}`,
               Charset: 'UTF-8',
             },
           },

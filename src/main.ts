@@ -79,11 +79,11 @@ export class NewsletterStack extends Stack {
       definition: sendEmailConfirmation.next(
         new sfn.Choice(this, 'SubscribeOrUnsubscribe?')
           .when(
-            sfn.Condition.stringEquals('$.type', 'SUBSCRIBE'),
+            sfn.Condition.stringEquals('$.type', 'subscribe'),
             subscribe,
           )
           .when(
-            sfn.Condition.stringEquals('$.type', 'UNSUBSCRIBE'),
+            sfn.Condition.stringEquals('$.type', 'unsubscribe'),
             unsubscribe,
           ),
       ),
@@ -125,7 +125,7 @@ export class NewsletterStack extends Stack {
             input: JSON.stringify({
               email: '$input.params(\'email\')',
               confirmationEndpoint: 'https://$context.domainName/$context.stage/confirm',
-              type: '$context.resourcePath.substring(1).toUpperCase()',
+              type: '$context.resourcePath.substring(1)',
             }),
           }),
         },
