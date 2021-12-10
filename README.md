@@ -31,7 +31,7 @@ Tasks:
 - **GetEmail**: DynamoDB _GetItem_ request for `email` in execution payload.
 - **IsValidRequest**: The state machine proceeds to _SendEmailConfirmation_ if the email address doesn't exist for a subscription request or does exist to cancel the subscription.
 - **SendEmailConfirmation**: The task invokes an AWS Lambda function to send a confirmation email via SES. The state machine waits until a successful callback or times out.
-- **SubscribeOrUnsubcribe?**: The choice task reads the `type` in the execution payload and triggers a _Subscribe_ or _Unsubscribe_ task.
+- **SubscribeOrUnsubscribe?**: The choice task reads the `type` in the execution payload and triggers a _Subscribe_ or _Unsubscribe_ task.
 - **Subscribe**: DynamoDB _PutItem_ request to store the email address.
 - **Unsubscribe**: DynamoDB _DeleteItem_ request to delete the email address.
 - **Do nothing**: Task to stop the execution immediately.
