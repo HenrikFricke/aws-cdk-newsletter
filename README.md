@@ -7,6 +7,35 @@ The project demonstrates a newsletter subscription service with serverless techn
 
 On a technical level, the example uses AWS Step Functions to implement the state machine using AWS Lambda functions and AWS service integrations. Ultimately, the email addresses get stored in a DynamoDB table.
 
+## State Machine
+
+### Execution Payload
+
+The state machine expects a JSON payload with the following structure:
+
+```json
+{
+  "email": "myname@example.com",
+  "confirmationEndpoint": "https://XXXXXXXXXX.execute-api.eu-central-1.amazonaws.com/prod/confirm",
+  "type": "subscribe"
+}
+```
+
+The `type` can be either `subscribe` or `unsubscribe`.
+
+### Diagram
+
+![step functions flow diagram](./docs/stepfunctions_graph.svg)
+
+Tasks:
+- **GetEmail**: DynamoDB _GetItem_ request for `email` in execution payload.
+- **IsValidRequest**: The state machine proceeds to _SendEmailConfirmation_ if the email address doesn't exist for a subscription request or does exist to cancel the subscription.
+- **SendEmailConfirmation**: The task invokes an AWS Lambda function to send a confirmation email via SES. The state machine waits until a successful callback or times out.
+- **SubscribeOrUnsubcribe?**: The choice task reads the `type` in the execution payload and triggers a _Subscribe_ or _Unsubscribe_ task.
+- **Subscribe**: DynamoDB _PutItem_ request to store the email address.
+- **Unsubscribe**: DynamoDB _DeleteItem_ request to delete the email address.
+- **Do nothing**: Task to stop the execution immediately.
+
 ## Usage
 
 ⚠️ AWS SES requires a verified email address to send emails. It is a manual step not covered by the CDK stack. Make sure you have a verified email address in your account. See [documentation](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-email-addresses.html).
