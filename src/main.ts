@@ -4,7 +4,7 @@ import { Api, ApiProps } from './constructs/api';
 import { StateMachine, StateMachineProps } from './constructs/stateMachine';
 import { Storage } from './constructs/storage';
 
-export type NewsletterStackProps = StackProps & Pick<ApiProps, 'redirectUrls'> & Omit<StateMachineProps, 'storage'>;
+export type NewsletterStackProps = StackProps & Pick<ApiProps, 'redirectUrls'> & Omit<StateMachineProps, 'newsletterTable'>;
 
 export class NewsletterStack extends Stack {
   constructor(scope: Construct, id: string, props: NewsletterStackProps) {
@@ -13,7 +13,7 @@ export class NewsletterStack extends Stack {
     const storage = new Storage(this, 'Storage');
 
     const stateMachine = new StateMachine(this, 'StateMachine', {
-      storage,
+      newsletterTable: storage.newsletterTable,
       ...props,
     });
 

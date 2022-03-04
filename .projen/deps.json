@@ -1,6 +1,10 @@
 {
   "dependencies": [
     {
+      "name": "@aws-sdk/client-sfn",
+      "type": "build"
+    },
+    {
       "name": "@types/jest",
       "type": "build"
     },
@@ -15,6 +19,10 @@
     },
     {
       "name": "@typescript-eslint/parser",
+      "type": "build"
+    },
+    {
+      "name": "async-wait-until",
       "type": "build"
     },
     {
@@ -71,6 +79,10 @@
     },
     {
       "name": "projen",
+      "type": "build"
+    },
+    {
+      "name": "testcontainers",
       "type": "build"
     },
     {

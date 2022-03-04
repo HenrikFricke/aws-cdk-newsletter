@@ -22,6 +22,9 @@ const project = new AwsCdkTypeScriptApp({
     'aws-cdk-lib',
     '@types/node',
     'esbuild@0',
+    'testcontainers',
+    '@aws-sdk/client-sfn',
+    'async-wait-until',
   ],
   deps: [
     '@aws-sdk/client-sesv2',

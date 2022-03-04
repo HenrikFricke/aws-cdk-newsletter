@@ -1,0 +1,30 @@
+{
+  "StateMachines": {
+    "StateMachineNewsletter": {
+      "TestCases": {
+        "InvalidRequestSubscribe": {
+          "GetEmail": "GetEmailExists"
+        },
+        "InvalidRequestUnsubscribe": {
+          "GetEmail": "GetEmailNotExists"
+        }
+      }
+    }
+  },
+  "MockedResponses": {
+    "GetEmailExists": {
+      "0": {
+        "Return": {
+          "Item": {
+            "email": "myname@example.com"
+          }
+        }
+      }
+    },
+    "GetEmailNotExists": {
+      "0": {
+        "Return": {}
+      }
+    }
+  }
+}
