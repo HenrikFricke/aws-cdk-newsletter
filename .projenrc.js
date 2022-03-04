@@ -16,6 +16,13 @@ const project = new AwsCdkTypeScriptApp({
   constructsVersion: '10.0.0',
   packageManager: NodePackageManager.NPM,
 
+  // TSconfig
+  tsconfig: {
+    compilerOptions: {
+      esModuleInterop: true,
+    },
+  },
+
   // Dependencies
   devDeps: [
     'constructs',
