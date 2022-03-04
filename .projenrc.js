@@ -16,12 +16,22 @@ const project = new AwsCdkTypeScriptApp({
   constructsVersion: '10.0.0',
   packageManager: NodePackageManager.NPM,
 
+  // TSconfig
+  tsconfig: {
+    compilerOptions: {
+      esModuleInterop: true,
+    },
+  },
+
   // Dependencies
   devDeps: [
     'constructs',
     'aws-cdk-lib',
     '@types/node',
     'esbuild@0',
+    'testcontainers',
+    '@aws-sdk/client-sfn',
+    'async-wait-until',
   ],
   deps: [
     '@aws-sdk/client-sesv2',

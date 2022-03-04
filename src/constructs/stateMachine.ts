@@ -1,10 +1,9 @@
 import { join } from 'path';
-import { Aws, Duration, aws_lambda_nodejs as lambdaNodeJs, aws_iam as iam, aws_stepfunctions_tasks as tasks, aws_stepfunctions as sfn } from 'aws-cdk-lib';
+import { Aws, Duration, aws_lambda_nodejs as lambdaNodeJs, aws_dynamodb as dynamodb, aws_iam as iam, aws_stepfunctions_tasks as tasks, aws_stepfunctions as sfn } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { Storage } from './storage';
 
 export interface StateMachineProps {
-  storage: Storage;
+  newsletterTable: dynamodb.Table;
   fromEmailAddress: string;
   confirmationLinkExpirationTime: Duration;
 }
@@ -16,7 +15,7 @@ export class StateMachine extends Construct {
     super(scope, id);
 
     const getEmail = new tasks.DynamoGetItem(this, 'GetEmail', {
-      table: props.storage.newsletterTable,
+      table: props.newsletterTable,
       key: {
         email: tasks.DynamoAttributeValue.fromString(sfn.JsonPath.stringAt('$.email')),
       },
@@ -24,7 +23,7 @@ export class StateMachine extends Construct {
     });
 
     const subscribe = new tasks.DynamoPutItem(this, 'Subscribe', {
-      table: props.storage.newsletterTable,
+      table: props.newsletterTable,
       item: {
         email: tasks.DynamoAttributeValue.fromString(sfn.JsonPath.stringAt('$.email')),
         createdAt: tasks.DynamoAttributeValue.fromString(sfn.JsonPath.stringAt('$$.State.EnteredTime')),
@@ -32,7 +31,7 @@ export class StateMachine extends Construct {
     });
 
     const unsubscribe = new tasks.DynamoDeleteItem(this, 'Unsubscribe', {
-      table: props.storage.newsletterTable,
+      table: props.newsletterTable,
       key: { email: tasks.DynamoAttributeValue.fromString(sfn.JsonPath.stringAt('$.email')) },
     });
 
@@ -67,7 +66,13 @@ export class StateMachine extends Construct {
       sfn.Condition.and(sfn.Condition.stringEquals('$.type', 'unsubscribe'), sfn.Condition.isPresent('$.emailItem.Item')),
     );
 
-    const doNothing = new sfn.Pass(this, 'Do nothing');
+    const doNothing = new sfn.Pass(this, 'Do nothing', {
+      result: {
+        value: {
+          status: 'SKIPPED',
+        },
+      },
+    });
 
     this.stateMachine = new sfn.StateMachine(this, 'Newsletter', {
       definition: getEmail
