@@ -26,7 +26,7 @@
     "organization": false
   },
   "devDependencies": {
-    "@aws-sdk/client-sfn": "^3.53.0",
+    "@aws-sdk/client-sfn": "^3.55.0",
     "@types/jest": "^27.4.1",
     "@types/node": "^14.17.0",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
@@ -52,7 +52,7 @@
   },
   "dependencies": {
     "@aws-cdk/assert": "^2.0.0",
-    "@aws-sdk/client-sesv2": "^3.53.0",
+    "@aws-sdk/client-sesv2": "^3.55.0",
     "aws-cdk-lib": "^2.0.0",
     "constructs": "^10.0.5"
   },
