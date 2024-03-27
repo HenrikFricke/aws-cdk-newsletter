@@ -1,8 +1,8 @@
 import { join } from 'path';
 import { App, Stack, Duration, aws_dynamodb as dynamodb } from 'aws-cdk-lib';
-import { StateMachine } from '../src/constructs/stateMachine';
 import { extractStateMachineAsls } from './helpers/extractStateMachineAsls';
 import { TestStateMachineLocal } from './helpers/TestStateMachineLocal';
+import { StateMachine } from '../src/constructs/stateMachine';
 
 let testStateMachineLocal: TestStateMachineLocal;
 
